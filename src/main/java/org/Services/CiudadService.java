@@ -5,6 +5,7 @@
 package org.Services;
 
 import java.util.List;
+import javax.swing.JOptionPane;
 import org.Infraestructure.Models.CiudadModel;
 import org.Infraestructure.Persistencia.PersistenciaCiudad;
 
@@ -19,34 +20,46 @@ public class CiudadService {
         ciudadDB = new PersistenciaCiudad(userBD, passDB, hostDB, portDB, dataBase);
     }
 
-    public String registrarCiudades(CiudadModel ciudad){
+    public void registrarCiudades(CiudadModel ciudad){
         if(validarDatos(ciudad)){
-           return ciudadDB.registrarCiudades(ciudad);
+           ciudadDB.registrarCiudades(ciudad);
         }
-        return "Ocurrió algún error, contactar con el Administrador";
+        else{
+        JOptionPane.showMessageDialog(null, "ocurrio un error, contactar con el administrador", "Error", JOptionPane.INFORMATION_MESSAGE);
+    }
     }
 
-    public String modificarCiudad(CiudadModel ciudad){
+    public void modificarCiudad(CiudadModel ciudad){
         if(validarDatos(ciudad)){
-            return ciudadDB.modificarCiudad(ciudad);
+            ciudadDB.modificarCiudad(ciudad);
+        }else{
+            JOptionPane.showMessageDialog(null, "ocurrio un error, contactar con el administrador", "Error", JOptionPane.INFORMATION_MESSAGE);
         }
-        return "Ocurrió algún error, contactar con el Administrador";
+        
     }
 
 
     public List<CiudadModel> consultarCiudades(){
         return  ciudadDB.consultarCiudades();
     }
+    public CiudadModel consultarPorId(int id_ciudad) {
+    CiudadModel ciudad1 = ciudadDB.consultarPorId(id_ciudad);
     
-    public String eliminarCiudad(int ciudades){
-        return ciudadDB.eliminarCiudad(ciudades);
+    if (ciudad1 == null) {
+        JOptionPane.showMessageDialog(null, "No se encontró ninguna ciudad con el ID " + id_ciudad, "Error", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    return ciudad1;
+}
+    public void eliminarCiudad(int ciudades){
+        ciudadDB.eliminarCiudad(ciudades);
     }
 
     private boolean validarDatos(CiudadModel ciudad) {
         try {
-        if(ciudad.ciudad.trim().isEmpty())
+        if(ciudad.getCiudad().trim().isEmpty())
             throw new Exception("La ciudad no puede estar vacía");
-        else if (ciudad.ciudad.trim().length() < 3) {
+        else if (ciudad.getCiudad().trim().length() < 3) {
             throw new Exception("La palabra cargada no tiene la longitud deseada");
         }
 

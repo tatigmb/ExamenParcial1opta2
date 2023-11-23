@@ -5,6 +5,7 @@
 package org.Services;
 
 import java.util.List;
+import javax.swing.JOptionPane;
 import org.Infraestructure.Models.ClienteModel;
 import org.Infraestructure.Persistencia.PersistenciaCliente;
 
@@ -19,23 +20,34 @@ public class ClienteService {
         clienteDB = new PersistenciaCliente(userBD, passDB, hostDB, portDB, dataBase);
     }
 
-    public String registroClientes(ClienteModel cliente){
-           return clienteDB.registroClientes(cliente);
+    public void registroClientes(ClienteModel cliente){
+            clienteDB.registroClientes(cliente);
     }
 
-    public String modificarClientes(ClienteModel cliente){
+    public void modificarClientes(ClienteModel cliente){
         
-            return clienteDB.modificarClientes(cliente);
+             clienteDB.modificarClientes(cliente);
         
     }
 
 
     public List<ClienteModel> consultarLosClientes(){
         return  clienteDB.consultarLosClientes();
+        
     }
     
-    public String eliminarlosClientes(int clientes){
-        return clienteDB.eliminarlosClientes(clientes);
+    public ClienteModel consultarPorId(int id_cliente) {
+    ClienteModel cliente1 = clienteDB.consultarPorId(id_cliente);
+        
+        if (cliente1 == null) {
+        JOptionPane.showMessageDialog(null, "No se encontró ningun cliente con el ID " + id_cliente, "Error", JOptionPane.INFORMATION_MESSAGE);
+    }
+        return cliente1;    
+    
+    }
+    
+    public void eliminarlosClientes(int clientes){
+        clienteDB.eliminarlosClientes(clientes);
     }
 
 }

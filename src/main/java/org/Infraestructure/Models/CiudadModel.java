@@ -9,10 +9,10 @@ package org.Infraestructure.Models;
  * @author Dell-Latitude
  */
 public class CiudadModel {
-    public int id_ciudad;
-    public String ciudad;
-    public String departamento;
-    public int postal_code;
+    private int id_ciudad;
+    private String ciudad;
+    private String departamento;
+    private int postal_code;
 
     public int getId_ciudad() {
         return id_ciudad;

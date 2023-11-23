@@ -7,6 +7,7 @@ package org.Infraestructure.Persistencia;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import org.Infraestructure.Models.ClienteModel;
 import org.example.Infraestructure.conexion;
 
@@ -21,41 +22,43 @@ public class PersistenciaCliente {
         conexion = new conexion(userBD, passDB, hostDB, portDB, dataBase);
     }
 
-    public String registroClientes(ClienteModel cliente){
+    public void registroClientes(ClienteModel cliente){
 
         try {
             conexion.setQuerySQL(conexion.conexionDB().createStatement());
             boolean execute = conexion.getQuerySQL().execute("INSERT INTO cliente(" +
                     "id_cliente, " +
                     "id_persona, " +
-                    "FechaIngreso, " +
-                    "Calificacion, " +
-                    "Estado) " +
+                    "fecha_ingreso, " +
+                    "calificacion, " +
+                    "estado) " +
                     "values('" +
-                    cliente.id_cliente + "', '" +
-                    cliente.id_persona + "', '" +
-                    cliente.FechaIngreso + "', '" +
-                    cliente.Calificacion + "', '" +
-                    cliente.Estado + "')");
+                    cliente.getId_cliente() + "', '" +
+                    cliente.getId_persona() + "', '" +
+                    cliente.getFecha_ingreso()+ "', '" +
+                    cliente.getCalificacion() + "', '" +
+                    cliente.getEstado() + "')");
             conexion.conexionDB().close();
-            return "El clientecfue registrado exitosamente";
-        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Registro Exitoso", "Éxito", JOptionPane.INFORMATION_MESSAGE);;
+        } catch (SQLException e){
+            JOptionPane.showMessageDialog(null, "ocurrio un error, contactar con el administrador", "Error", JOptionPane.INFORMATION_MESSAGE);
             throw new RuntimeException(e);
         }
     }
 
-    public String modificarClientes(ClienteModel cliente){
+    public void modificarClientes(ClienteModel cliente){
 
         try {
             conexion.setQuerySQL(conexion.conexionDB().createStatement());
             boolean execute = conexion.getQuerySQL().execute("UPDATE cliente SET " +
-                    "id_persona = '" + cliente.id_persona + "'," +
-                    "FechaIngreso = '" + cliente.FechaIngreso + "'," +
-                    "Calificacion = '" + cliente.Calificacion + "'," +
-                    "Estado = '" + cliente.Estado + "' Where cliente.id_cliente = " + cliente.id_cliente);
+                    "id_persona = '" + cliente.getId_persona() + "'," +
+                    "Fecha_ingreso = '" + cliente.getFecha_ingreso()+ "'," +
+                    "calificacion = '" + cliente.getCalificacion() + "'," +
+                    "estado = '" + cliente.getEstado() + "' Where cliente.id_cliente = " + cliente.getId_cliente());
             conexion.conexionDB().close();
-            return "Los datos del cliente fueron modificados exitosamente";
+            JOptionPane.showMessageDialog(null, "Actualizacion Exitosa", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "ocurrio un error, contactar con el administrador", "Error", JOptionPane.INFORMATION_MESSAGE);
             throw new RuntimeException(e);
         }
     }
@@ -69,9 +72,9 @@ public class PersistenciaCliente {
 
         while (conexion.getResultadoQuery().next()) {
             ClienteModel clientes = new ClienteModel();
-            clientes.FechaIngreso = conexion.getResultadoQuery().getString("FechaIngreso");
-            clientes.Calificacion = conexion.getResultadoQuery().getString("Calificacion");
-            clientes.Estado = conexion.getResultadoQuery().getString("Estado");
+            clientes.setFecha_ingreso(conexion.getResultadoQuery().getString("fecha_ingreso"));
+            clientes.setCalificacion(conexion.getResultadoQuery().getString("calificacion"));
+            clientes.setEstado(conexion.getResultadoQuery().getString("estado"));
          
             cliente.add(clientes);
         }
@@ -81,8 +84,27 @@ public class PersistenciaCliente {
 
     return cliente;
     }
-    
-    public String eliminarlosClientes(int clientes) {
+    public ClienteModel consultarPorId(int idcliente) {
+    try {
+        conexion.setQuerySQL(conexion.conexionDB().createStatement());
+        conexion.setResultadoQuery(conexion.getQuerySQL().executeQuery("SELECT * FROM cliente WHERE id_cliente = " + idcliente));
+
+        if (conexion.getResultadoQuery().next()) {
+            ClienteModel cliente = new ClienteModel();
+            cliente.setId_cliente(conexion.getResultadoQuery().getInt("id_cliente"));
+            cliente.setId_persona(conexion.getResultadoQuery().getInt("id_persona"));
+            cliente.setFecha_ingreso(conexion.getResultadoQuery().getString("fecha_ingreso"));
+            cliente.setCalificacion(conexion.getResultadoQuery().getString("calificacion"));
+            cliente.setEstado(conexion.getResultadoQuery().getString("estado"));
+            return cliente;
+        } else {
+            return null; 
+        }
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    }
+}
+    public void eliminarlosClientes(int clientes) {
     try {
         conexion.setQuerySQL(conexion.conexionDB().createStatement());
 
@@ -91,9 +113,9 @@ public class PersistenciaCliente {
         conexion.conexionDB().close();
 
         if (rowCount > 0) {
-            return "El cliente fue eliminado con exito.";
+            JOptionPane.showMessageDialog(null, "Eliminacion exitosa.");
         } else {
-            return "No se encontraron clientes con esas caracteristicas.";
+            JOptionPane.showMessageDialog(null, "no se pudo eliminar.");
         }
     } catch (SQLException e) {
         throw new RuntimeException(e);

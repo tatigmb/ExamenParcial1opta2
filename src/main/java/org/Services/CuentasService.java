@@ -5,6 +5,7 @@
 package org.Services;
 
 import java.util.List;
+import javax.swing.JOptionPane;
 import org.Infraestructure.Models.CuentasModel;
 import org.Infraestructure.Persistencia.PersistenciaCuentas;
 
@@ -18,13 +19,13 @@ public class CuentasService {
         cuentasDB = new PersistenciaCuentas(userBD, passDB, hostDB, portDB, dataBase);
     }
 
-    public String registroDeCuentas(CuentasModel cuentas){
-           return cuentasDB.registroDeCuentas(cuentas);
+    public void registroDeCuentas(CuentasModel cuentas){
+           cuentasDB.registroDeCuentas(cuentas);
     }
 
-    public String modificarCuentas(CuentasModel cuentas){
+    public void modificarCuentas(CuentasModel cuentas){
         
-            return cuentasDB.modificarCuentas(cuentas);
+             cuentasDB.modificarCuentas(cuentas);
         
     }
 
@@ -32,9 +33,17 @@ public class CuentasService {
     public List<CuentasModel> consultaDeCuentas(){
         return  cuentasDB.consultaDeCuentas();
     }
+    public CuentasModel consultaPorId(int id_cuentas) {
+        CuentasModel cuenta1 = cuentasDB.consultaPorId(id_cuentas);
+        
+        if (cuenta1 == null) {
+        JOptionPane.showMessageDialog(null, "No se encontró ninguna cuenta con el ID " + id_cuentas, "Error", JOptionPane.INFORMATION_MESSAGE);
+    }
+        return cuenta1;
     
-    public String eliminarCuentas(int cuenta){
-        return cuentasDB.eliminarCuentas(cuenta);
+}
+    public void eliminarCuentas(int cuenta){
+        cuentasDB.eliminarCuentas(cuenta);
     }
 
 }

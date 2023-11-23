@@ -10,17 +10,17 @@ package org.Infraestructure.Models;
  */
 public class CuentasModel {
 
-     public int id_cuentas;
-    public int id_cliente;
-    public String NroCuenta;
-    public String FechaAlta;
-    public String TipoCuenta;
-    public String Estado;
-    public double Saldo;
-    public String NroContrato;
-    public double CostMantenimiento;
-    public String PromAcreditacion;
-    public String Moneda;
+    private int id_cuentas;
+    private int id_cliente;
+    private String NroCuenta;
+    private String FechaAlta;
+    private String TipoCuenta;
+    private String Estado;
+    private double Saldo;
+    private String NroContrato;
+    private double CostMantenimiento;
+    private String PromAcreditacion;
+    private String Moneda;
     
     
     

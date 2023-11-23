@@ -13,16 +13,16 @@ import java.util.List;
 public class PersonaModel {
 
     
-    public int id_persona;
-    public int id_ciudad;
-    public String Nombre;
-    public String Apellido;
-    public String TipoDocumento;
-    public String NroDocumento;
-    public String Direccion;
-    public String Celular;
-    public String Email;
-    public String Estado;
+    private int id_persona;
+    private int id_ciudad;
+    private String Nombre;
+    private String Apellido;
+    private String TipoDocumento;
+    private String NroDocumento;
+    private String Direccion;
+    private String Celular;
+    private String Email;
+    private String Estado;
 
     public int getId_persona() {
         return id_persona;

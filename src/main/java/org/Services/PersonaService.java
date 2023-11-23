@@ -5,6 +5,7 @@
 package org.Services;
 
 import java.util.List;
+import javax.swing.JOptionPane;
 import org.Infraestructure.Models.PersonaModel;
 import org.Infraestructure.Persistencia.PersistenciaPersona;
 
@@ -15,34 +16,42 @@ public class PersonaService {
         personasDB = new PersistenciaPersona(userBD, passDB, hostDB, portDB, dataBase);
     }
 
-    public String registrarPersona(PersonaModel persona){
+    public void registrarPersona(PersonaModel persona){
         if(validarDatos(persona)){
-           return personasDB.registrarPersona(persona);
+            personasDB.registrarPersona(persona);
         }
-        return "Ocurrió algún error, contactese con el Administrador";
+        
     }
 
-    public String modificarPersona(PersonaModel persona){
+    public void modificarPersona(PersonaModel persona){
         if(validarDatos(persona)){
-            return personasDB.modificarPersona(persona);
+            personasDB.modificarPersona(persona);
         }
-        return "Ocurrió algún error, contactese con el Administrador";
+        JOptionPane.showMessageDialog(null, "ocurrio un error.");
     }
 
 
-    public List<PersonaModel> consultarPersona(){
+    public List<PersonaModel> consultarPersonas(){
         return  personasDB.consultarPersonas();
     }
-    
-    public String eliminarPersona(int persona){
-        return personasDB.eliminarPersona(persona);
+     public PersonaModel consultarPorId(int id_persona) {
+        PersonaModel persona1 = personasDB.consultarPorId(id_persona);
+        
+        if (persona1 == null) {
+        JOptionPane.showMessageDialog(null, "No se encontró ninguna persona con el ID " + id_persona, "Error", JOptionPane.INFORMATION_MESSAGE);
+    }
+        return persona1;
+     }
+    public void eliminarPersona(int persona){
+        personasDB.eliminarPersona(persona);
+        
     }
 
     private boolean validarDatos(PersonaModel persona) {
         try {
-        if(persona.Nombre.trim().isEmpty())
+        if(persona.getNombre().trim().isEmpty())
             throw new Exception("El nombre no debe estar vacío");
-        else if (persona.Nombre.trim().length() < 3) {
+        else if (persona.getNombre().trim().length() < 3) {
             throw new Exception("El nombre no tiene la longitud necesaria");
         }
 

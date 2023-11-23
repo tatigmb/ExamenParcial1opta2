@@ -7,6 +7,7 @@ package org.Infraestructure.Persistencia;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import org.Infraestructure.Models.PersonaModel;
 import org.example.Infraestructure.conexion;
 
@@ -21,7 +22,7 @@ public class PersistenciaPersona {
         conexion = new conexion(userBD, passDB, hostDB, portDB, dataBase);
     }
 
-    public String registrarPersona(PersonaModel persona){
+    public void registrarPersona(PersonaModel persona){
 
         try {
             conexion.setQuerySQL(conexion.conexionDB().createStatement());
@@ -37,39 +38,41 @@ public class PersistenciaPersona {
                     "email, " +
                     "estado) " +
                     "values('" +
-                    persona.id_persona + "', '" +
-                    persona.id_ciudad + "', '" +
-                    persona.Nombre + "', '" +
-                    persona.Apellido + "', '" +
-                    persona.TipoDocumento + "', '" +
-                    persona.NroDocumento + "', '" +
-                    persona.Direccion + "', '" +
-                    persona.Celular + "', '" +
-                    persona.Email + "', '" +
-                    persona.Estado + "')");
+                    persona.getId_persona() + "', '" +
+                    persona.getId_ciudad() + "', '" +
+                    persona.getNombre() + "', '" +
+                    persona.getApellido() + "', '" +
+                    persona.getTipoDocumento() + "', '" +
+                    persona.getNroDocumento() + "', '" +
+                    persona.getDireccion() + "', '" +
+                    persona.getCelular() + "', '" +
+                    persona.getEmail() + "', '" +
+                    persona.getEstado() + "')");
             conexion.conexionDB().close();
-            return "La persona " + persona.Nombre + " fue registrada correctamente!!!";
+            JOptionPane.showMessageDialog(null, "fue registrado con exito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "ocurrio un error, contactar con el administrador", "Error", JOptionPane.INFORMATION_MESSAGE);
             throw new RuntimeException(e);
         }
     }
 
-    public String modificarPersona(PersonaModel persona){
+    public void modificarPersona(PersonaModel persona){
 
         try {
             conexion.setQuerySQL(conexion.conexionDB().createStatement());
             boolean execute = conexion.getQuerySQL().execute("UPDATE persona SET " +
-                    "nombre = '" + persona.Nombre + "'," +
-                    "apellido = '" + persona.Apellido + "'," +
-                    "tipodocumento = '" + persona.TipoDocumento + "'," +
-                    "nrodocumento = '" + persona.NroDocumento + "'," +
-                    "direccion = '" + persona.Direccion + "'," +
-                    "celular = '" + persona.Celular + "'," +
-                    "email = '" + persona.Email + "'," +
-                    "estado = '" + persona.Estado + "' Where persona.idPersona = " + persona.id_persona);
+                    "nombre = '" + persona.getNombre() + "'," +
+                    "apellido = '" + persona.getApellido() + "'," +
+                    "tipodocumento = '" + persona.getTipoDocumento() + "'," +
+                    "nrodocumento = '" + persona.getNroDocumento() + "'," +
+                    "direccion = '" + persona.getDireccion() + "'," +
+                    "celular = '" + persona.getCelular() + "'," +
+                    "email = '" + persona.getEmail() + "'," +
+                    "estado = '" + persona.getEstado() + "' Where persona.id_persona = " + persona.getId_persona());
             conexion.conexionDB().close();
-            return "Los datos de la persona " + persona.Nombre + " fueron modificados exitosamente";
+            JOptionPane.showMessageDialog(null, "Actualizado con exito", "Exito", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "ocurrio un error, contactar con el administrador", "Error", JOptionPane.INFORMATION_MESSAGE);
             throw new RuntimeException(e);
         }
     }
@@ -83,14 +86,14 @@ public class PersistenciaPersona {
 
         while (conexion.getResultadoQuery().next()) {
             PersonaModel personas = new PersonaModel();
-            personas.Nombre = conexion.getResultadoQuery().getString("nombre");
-            personas.Apellido = conexion.getResultadoQuery().getString("apellido");
-            personas.TipoDocumento = conexion.getResultadoQuery().getString("tipodocumento");
-            personas.NroDocumento = conexion.getResultadoQuery().getString("nrodocumento");
-            personas.Direccion = conexion.getResultadoQuery().getString("direccion");
-            personas.Celular = conexion.getResultadoQuery().getString("celular");
-            personas.Email = conexion.getResultadoQuery().getString("email");
-            personas.Estado = conexion.getResultadoQuery().getString("estado");
+            personas.setNombre(conexion.getResultadoQuery().getString("nombre"));
+            personas.setApellido(conexion.getResultadoQuery().getString("apellido"));
+            personas.setTipoDocumento(conexion.getResultadoQuery().getString("tipodocumento"));
+            personas.setNroDocumento(conexion.getResultadoQuery().getString("nrodocumento"));
+            personas.setDireccion(conexion.getResultadoQuery().getString("direccion"));
+            personas.setCelular(conexion.getResultadoQuery().getString("celular"));
+            personas.setEmail(conexion.getResultadoQuery().getString("email"));
+            personas.setEstado(conexion.getResultadoQuery().getString("estado"));
             persona.add(personas);
         }
     } catch (SQLException e) {
@@ -99,19 +102,43 @@ public class PersistenciaPersona {
 
     return persona;
     }
-    
-    public String eliminarPersona(int personas) {
+     public PersonaModel consultarPorId(int id_persona) {
+    try {
+        conexion.setQuerySQL(conexion.conexionDB().createStatement());
+        conexion.setResultadoQuery(conexion.getQuerySQL().executeQuery("SELECT * FROM persona WHERE id_persona = " + id_persona));
+
+        if (conexion.getResultadoQuery().next()) {
+            PersonaModel persona = new PersonaModel();
+            persona.setId_persona(conexion.getResultadoQuery().getInt("id_persona"));
+            persona.setId_ciudad(conexion.getResultadoQuery().getInt("id_ciudad"));
+            persona.setNombre(conexion.getResultadoQuery().getString("nombre"));
+            persona.setApellido(conexion.getResultadoQuery().getString("apellido"));
+            persona.setTipoDocumento(conexion.getResultadoQuery().getString("tipodocumento"));
+            persona.setNroDocumento(conexion.getResultadoQuery().getString("nrodocumento"));
+            persona.setDireccion(conexion.getResultadoQuery().getString("direccion"));
+            persona.setCelular(conexion.getResultadoQuery().getString("celular"));
+            persona.setEmail(conexion.getResultadoQuery().getString("email"));
+            persona.setEstado(conexion.getResultadoQuery().getString("estado"));
+            return persona;
+        } else {
+            return null; 
+        }
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    }
+}
+    public void eliminarPersona(int personas) {
     try {
         conexion.setQuerySQL(conexion.conexionDB().createStatement());
 
-        int rowCount = conexion.getQuerySQL().executeUpdate("DELETE FROM personas WHERE id_persona = " + personas);
+        int rowCount = conexion.getQuerySQL().executeUpdate("DELETE FROM persona WHERE id_persona = " + personas);
 
         conexion.conexionDB().close();
 
         if (rowCount > 0) {
-            return "La persona con id " + personas + " fue eliminada con exito.";
+            JOptionPane.showMessageDialog(null, "Eliminacion exitosa.");
         } else {
-            return "No se encontró personas con id " + personas+ ". No se pudo eliminar.";
+            JOptionPane.showMessageDialog(null, "No se pudo eliminar.");
         }
     } catch (SQLException e) {
         throw new RuntimeException(e);

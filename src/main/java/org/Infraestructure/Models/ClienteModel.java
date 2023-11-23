@@ -9,11 +9,11 @@ package org.Infraestructure.Models;
  * @author Dell-Latitude
  */
 public class ClienteModel {
-    public int id_cliente;
-    public int id_persona;
-    public String FechaIngreso;
-    public String Calificacion;
-    public String Estado;
+    private int id_cliente;
+    private int id_persona;
+    private String Fecha_ingreso;
+    private String Calificacion;
+    private String Estado;
 
     public int getId_cliente() {
         return id_cliente;
@@ -31,12 +31,12 @@ public class ClienteModel {
         this.id_persona = id_persona;
     }
 
-    public String getFechaIngreso() {
-        return FechaIngreso;
+     public String getFecha_ingreso() {
+        return Fecha_ingreso;
     }
 
-    public void setFechaIngreso(String FechaIngreso) {
-        this.FechaIngreso = FechaIngreso;
+    public void setFecha_ingreso(String Fecha_ingreso) {
+        this.Fecha_ingreso = Fecha_ingreso;
     }
 
     public String getCalificacion() {

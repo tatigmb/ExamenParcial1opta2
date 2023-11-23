@@ -11,16 +11,16 @@ package org.Infraestructure.Models;
  * @author Dell-Latitude
  */
 public class MovimientosModel {
-    public int id_movimiento;
-    public int id_cuenta;
-    public String FechaMovimiento;
-    public String TipoMovimiento;
-    public double Saldo_anterior;
-    public double saldo_actual;
-    public double MontoMovimiento;
-    public double CuentaOrigen;
-    public double CuentaDestino;
-    public double Canal;
+    private int id_movimiento;
+    private int id_cuenta;
+    private String FechaMovimiento;
+    private String TipoMovimiento;
+    private double Saldo_anterior;
+    private double saldo_actual;
+    private double MontoMovimiento;
+    private double CuentaOrigen;
+    private double CuentaDestino;
+    private double Canal;
 
     public int getId_movimiento() {
         return id_movimiento;

@@ -7,6 +7,7 @@ package org.Infraestructure.Persistencia;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import org.Infraestructure.Models.CiudadModel;
 import org.example.Infraestructure.conexion;
 
@@ -21,7 +22,7 @@ public class PersistenciaCiudad {
         conexion = new conexion(userBD, passDB, hostDB, portDB, dataBase);
     }
 
-    public String registrarCiudades(CiudadModel ciudad){
+    public void registrarCiudades(CiudadModel ciudad){
 
         try {
             conexion.setQuerySQL(conexion.conexionDB().createStatement());
@@ -31,28 +32,30 @@ public class PersistenciaCiudad {
                     "departamento, " +
                     "postal_code) " +
                     "values('" +
-                    ciudad.id_ciudad + "', '" +
-                    ciudad.ciudad + "', '" +
-                    ciudad.departamento + "', '" +
-                    ciudad.postal_code + "')");
+                    ciudad.getId_ciudad() + "', '" +
+                    ciudad.getCiudad() + "', '" +
+                    ciudad.getDepartamento() + "', '" +
+                    ciudad.getPostal_code() + "')");
             conexion.conexionDB().close();
-            return "La ciudad " + ciudad.ciudad + " fue registrada correctamente!!!";
+            JOptionPane.showMessageDialog(null, "Registro Exitoso", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "ocurrio un error, contactar con el administrador", "Error", JOptionPane.INFORMATION_MESSAGE);
             throw new RuntimeException(e);
         }
     }
 
-    public String modificarCiudad(CiudadModel ciudad){
+    public void modificarCiudad(CiudadModel ciudad){
 
         try {
             conexion.setQuerySQL(conexion.conexionDB().createStatement());
             boolean execute = conexion.getQuerySQL().execute("UPDATE ciudad SET " +
-                    "ciudad = '" + ciudad.ciudad + "'," +
-                    "departamento = '" + ciudad.departamento + "'," +
-                    "postal_code = '" + ciudad.postal_code + "' Where ciudad.id_ciudad = " + ciudad.id_ciudad);
+                    "ciudad = '" + ciudad.getCiudad() + "'," +
+                    "departamento = '" + ciudad.getDepartamento() + "'," +
+                    "postal_code = '" + ciudad.getPostal_code() + "' Where ciudad.id_ciudad = " + ciudad.getId_ciudad());
             conexion.conexionDB().close();
-            return "Los datos de la ciudad " + ciudad.ciudad + " fueron modificados correctamente!";
+           JOptionPane.showMessageDialog(null, "Actualizacion Exitosa", "Éxito", JOptionPane.INFORMATION_MESSAGE); 
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "ocurrio un error, contactar con el administrador", "Error", JOptionPane.INFORMATION_MESSAGE);
             throw new RuntimeException(e);
         }
     }
@@ -66,10 +69,10 @@ public class PersistenciaCiudad {
 
         while (conexion.getResultadoQuery().next()) {
             CiudadModel ciudades = new CiudadModel();
-            ciudades.id_ciudad = conexion.getResultadoQuery().getInt("id_ciudad");
-            ciudades.ciudad = conexion.getResultadoQuery().getString("ciudad");
-            ciudades.departamento = conexion.getResultadoQuery().getString("departamento");
-            ciudades.postal_code = conexion.getResultadoQuery().getInt("postal_code");
+            ciudades.setId_ciudad(conexion.getResultadoQuery().getInt("id_ciudad"));
+            ciudades.setCiudad(conexion.getResultadoQuery().getString("ciudad"));
+            ciudades.setDepartamento(conexion.getResultadoQuery().getString("departamento"));
+            ciudades.setPostal_code(conexion.getResultadoQuery().getInt("postal_code")); 
          
             ciudad.add(ciudades);
         }
@@ -79,8 +82,26 @@ public class PersistenciaCiudad {
 
     return ciudad;
     }
-    
-    public String eliminarCiudad(int ciudades) {
+    public CiudadModel consultarPorId(int idCiudad) {
+    try {
+        conexion.setQuerySQL(conexion.conexionDB().createStatement());
+        conexion.setResultadoQuery(conexion.getQuerySQL().executeQuery("SELECT * FROM ciudad WHERE id_ciudad = " + idCiudad));
+
+        if (conexion.getResultadoQuery().next()) {
+            CiudadModel ciudad = new CiudadModel();
+            ciudad.setId_ciudad(conexion.getResultadoQuery().getInt("id_ciudad"));
+            ciudad.setCiudad(conexion.getResultadoQuery().getString("ciudad"));
+            ciudad.setDepartamento(conexion.getResultadoQuery().getString("departamento"));
+            ciudad.setPostal_code(conexion.getResultadoQuery().getInt("postal_code"));
+            return ciudad;
+        } else {
+            return null; 
+        }
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    }
+}
+    public void eliminarCiudad(int ciudades) {
     try {
         conexion.setQuerySQL(conexion.conexionDB().createStatement());
 
@@ -89,9 +110,9 @@ public class PersistenciaCiudad {
         conexion.conexionDB().close();
 
         if (rowCount > 0) {
-            return "La ciudad fue eliminada con exito.";
+             JOptionPane.showMessageDialog(null, "Eliminacion exitosa.");
         } else {
-            return "No se encontraron ciudades con esas caracteristicas.";
+            JOptionPane.showMessageDialog(null, "Ocurrio un error, contactar al administrador.");
         }
     } catch (SQLException e) {
         throw new RuntimeException(e);

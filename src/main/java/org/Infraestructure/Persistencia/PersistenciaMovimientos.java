@@ -37,16 +37,16 @@ public class PersistenciaMovimientos {
                     "CuentaDestino, " +
                     "Canal) " +
                     "values('" +
-                    movimientos.id_movimiento + "', '" +
-                    movimientos.id_cuenta + "', '" +
-                    movimientos.FechaMovimiento + "', '" +
-                    movimientos.TipoMovimiento + "', '" +
-                    movimientos.Saldo_anterior + "', '" +
-                    movimientos.saldo_actual + "', '" +
-                    movimientos.MontoMovimiento + "', '" +
-                    movimientos.CuentaOrigen + "', '" +
-                    movimientos.CuentaDestino + "', '" +
-                    movimientos.Canal + "')");
+                    movimientos.getId_movimiento() + "', '" +
+                    movimientos.getId_cuenta() + "', '" +
+                    movimientos.getFechaMovimiento() + "', '" +
+                    movimientos.getTipoMovimiento() + "', '" +
+                    movimientos.getSaldo_anterior() + "', '" +
+                    movimientos.getSaldo_actual() + "', '" +
+                    movimientos.getMontoMovimiento() + "', '" +
+                    movimientos.getCuentaOrigen() + "', '" +
+                    movimientos.getCuentaDestino() + "', '" +
+                    movimientos.getCanal() + "')");
             conexion.conexionDB().close();
             return "El movimiento fue registrado en el sistema";
         } catch (SQLException e) {
@@ -59,15 +59,15 @@ public class PersistenciaMovimientos {
         try {
             conexion.setQuerySQL(conexion.conexionDB().createStatement());
             boolean execute = conexion.getQuerySQL().execute("UPDATE movimientos SET " +
-                    "id_cuenta = '" + movimientos.id_cuenta + "'," +
-                    "FechaMovimiento = '" + movimientos.FechaMovimiento + "'," +
-                    "TipoMovimiento = '" + movimientos.TipoMovimiento+ "'," +
-                    "Saldo_anterior = '" + movimientos.Saldo_anterior + "'," +
-                    "saldo_actual = '" + movimientos.saldo_actual + "'," +
-                    "MontoMovimiento = '" + movimientos.MontoMovimiento + "'," +
-                    "CuentaOrigen = '" + movimientos.CuentaOrigen + "'," +
-                    "CuentaDestino = '" + movimientos.CuentaDestino + "'," +        
-                    "Canal = '" + movimientos.Canal + "' Where movimientos.id_movimiento = " + movimientos.id_movimiento);
+                    "id_cuenta = '" + movimientos.getId_cuenta() + "'," +
+                    "FechaMovimiento = '" + movimientos.getFechaMovimiento() + "'," +
+                    "TipoMovimiento = '" + movimientos.getTipoMovimiento()+ "'," +
+                    "Saldo_anterior = '" + movimientos.getSaldo_anterior() + "'," +
+                    "saldo_actual = '" + movimientos.getSaldo_actual() + "'," +
+                    "MontoMovimiento = '" + movimientos.getMontoMovimiento() + "'," +
+                    "CuentaOrigen = '" + movimientos.getCuentaOrigen() + "'," +
+                    "CuentaDestino = '" + movimientos.getCuentaDestino() + "'," +        
+                    "Canal = '" + movimientos.getCanal() + "' Where movimientos.id_movimiento = " + movimientos.getId_movimiento());
             conexion.conexionDB().close();
             return "El movimiento de la cuenta fue modificado exitosamente";
         } catch (SQLException e) {
@@ -84,14 +84,14 @@ public class PersistenciaMovimientos {
 
         while (conexion.getResultadoQuery().next()) {
             MovimientosModel movimiento = new MovimientosModel();
-            movimiento.FechaMovimiento = conexion.getResultadoQuery().getString("FechaMovimiento");
-            movimiento.TipoMovimiento = conexion.getResultadoQuery().getString("TipoMovimiento");
-            movimiento.Saldo_anterior = conexion.getResultadoQuery().getDouble("Saldo_anterior");
-            movimiento.saldo_actual = conexion.getResultadoQuery().getDouble("saldo_actual");
-            movimiento.MontoMovimiento = conexion.getResultadoQuery().getDouble("MontoMovimiento");
-            movimiento.CuentaOrigen= conexion.getResultadoQuery().getDouble("CuentaOrigen");
-            movimiento.CuentaDestino= conexion.getResultadoQuery().getDouble("CuentaDestino");
-            movimiento.Canal = conexion.getResultadoQuery().getDouble("Canal");
+            movimiento.setFechaMovimiento(conexion.getResultadoQuery().getString("FechaMovimiento"));
+            movimiento.setTipoMovimiento(conexion.getResultadoQuery().getString("TipoMovimiento"));
+            movimiento.setSaldo_anterior(conexion.getResultadoQuery().getDouble("Saldo_anterior"));
+            movimiento.setSaldo_actual(conexion.getResultadoQuery().getDouble("saldo_actual"));
+            movimiento.setMontoMovimiento( conexion.getResultadoQuery().getDouble("MontoMovimiento"));
+            movimiento.setCuentaOrigen(conexion.getResultadoQuery().getDouble("CuentaOrigen"));
+            movimiento.setCuentaDestino(conexion.getResultadoQuery().getDouble("CuentaDestino"));
+            movimiento.setCanal(conexion.getResultadoQuery().getDouble("Canal"));
          
             movimientos.add(movimiento);
         }
